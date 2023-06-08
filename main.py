@@ -67,12 +67,35 @@ class Game:
                         not_valid_poss = False
                         self.mines_list.append(self.board.cells[pos])
 
+    def verify_cell(self, coord):
+        game_status = True
+        for mine in self.mines_list:
+            # print(mine.pos)
+            if mine.pos == coord:
+                game_status = False
+        return game_status
 
-print('Minesweeper')
 
-sz = 5
-game_board = Board(5)
-game = Game(game_board, mines=3)
+if __name__ == "__main__":
+    print('Minesweeper')
 
-game.place_mines()
-print(game_board.print_board())
+    sz = 5
+    game_board = Board(5)
+    game = Game(game_board, mines=3)
+
+    game.place_mines()
+
+    game_on = True
+
+    keys = list(game_board.cells.keys())
+
+    while game_on:
+        print(game_board.print_board())
+        coordinate = input('Put a coordinate (A1 format):')
+        if coordinate not in keys:
+            print("Not valid coordinate\n")
+        else:
+            game_on = game.verify_cell(coordinate)
+
+    print("Game Over")
+

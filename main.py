@@ -117,9 +117,18 @@ class Game:
 if __name__ == "__main__":
     print('Minesweeper')
 
-    sz = 5
-    game_board = Board(5)
-    game = Game(game_board, mines=3)
+    level_list = {'0': [3, 1],
+                  '1': [5, 3],
+                  '2': [7, 5],
+                  '3': [9, 10]}
+    level = ''
+    while level not in level_list.keys():
+        level = input('Select level (0-3):')
+        if level not in level_list:
+            print("Not valid\n")
+
+    game_board = Board(level_list[level][0])
+    game = Game(game_board, mines=level_list[level][1])
 
     game.place_mines()
 
@@ -129,7 +138,7 @@ if __name__ == "__main__":
 
     while game_on:
         print(game_board.print_board())
-
+        print(f'There are {level_list[level][1]} mines.')
         coordinate = input('Put a coordinate (A1 format):')
         if coordinate not in keys:
             print("Not valid coordinate\n")
@@ -140,6 +149,8 @@ if __name__ == "__main__":
         game_board.cells[c].status = f' [{game_board.cells[c].value}] '
 
     if game.win_status:
+        for mine in game.mines_list:
+            mine.status = f' [µ] '
         print(game_board.print_board())
         print("\nYou win!")
     else:
